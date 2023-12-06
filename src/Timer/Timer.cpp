@@ -3,7 +3,7 @@
 Timer::Timer(bool isMillis)
 : isMillis(isMillis)
 {
-
+    startTimer();
 }
 
 void Timer::startTimer()

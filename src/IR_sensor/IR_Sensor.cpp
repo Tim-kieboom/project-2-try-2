@@ -27,3 +27,11 @@ int checkIR()
 
     return WALL_DETECTED;
 }
+
+void printIR_Data()
+{
+    String IR1 = String(digitalRead(RECIEVER_PIN_IR1));
+    String IR2 = String(digitalRead(RECIEVER_PIN_IR2));
+
+    Serial.println("[IR1]: " + IR1 + ", [IR2]: " + IR2);
+}

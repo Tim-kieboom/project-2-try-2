@@ -11,5 +11,6 @@
 
 void IR_Innit();
 int checkIR();
+void printIR_Data();
 
 #endif

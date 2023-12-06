@@ -10,8 +10,44 @@ struct CarData
 
 void init()
 {
+  Serial.begin(115200);
+  Serial.println("starting");
+
   ultrasoonStartup();
   IR_Innit();
+}
+
+void printUltrasoon()
+{
+  static Timer timer = Timer(SET_TIMER_IN_MS);
+  timer.updateTimer();
+  
+  if(timer.waitTime(200))
+  {
+    Serial.println(readUltrasoon());
+    timer.resetBeginTime();
+  }
+}
+
+void printIR_Sensors()
+{
+  static Timer timer = Timer(SET_TIMER_IN_MS);
+  timer.updateTimer();
+
+  if(timer.waitTime(200))
+  {
+    printIR_Data();
+    timer.resetBeginTime();
+  }
+}
+
+void debugSensors()
+{
+  while(1)
+  {
+    printUltrasoon();
+    printIR_Data();
+  }
 }
 
 void carLogic(CarData* data)
@@ -32,12 +68,19 @@ int main()
   WifiEsp* wifi = new WifiEsp();
   wifi->wifi_Innit();
   init();
-  
+
+  testMotor();
+
   while(1)
   {
     carLogic(data);
 
-    data->start = wifi->loopWifi(data->irData1, data->irData2, data->ulstrasoonData);
+    data->start = wifi->loopWifi
+    (
+      data->irData1, 
+      data->irData2, 
+      data->ulstrasoonData
+    );
   }
 
   delete data;
