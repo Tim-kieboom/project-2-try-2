@@ -1,14 +1,8 @@
-#include <Arduino.h>
-#include <WiFi.h>
-#include <WiFiClient.h>
-#include <WiFiAP.h>
-
-const char *ssid = "groep30";
-const char *password = "groep30";
+#include "wifiEsp.h"
 
 WiFiServer server(80);
 
-void wifi_Innit() 
+void WifiEsp::wifi_Innit() 
 {
   Serial.begin(115200);
 
@@ -19,7 +13,7 @@ void wifi_Innit()
   Serial.println("connection made");
 }
 
-bool loopWifi(int ir1, int ir2, int uds) 
+bool WifiEsp::loopWifi(int ir1, int ir2, int ultrasoonSensor) 
 {
   int returnValue = 0;
   WiFiClient client = server.available();
@@ -51,7 +45,7 @@ bool loopWifi(int ir1, int ir2, int uds)
             client.print(ir2);
             client.print("<br>");
             client.print("Ultrasonische Afstands Sensor: ");
-            client.print(uds);
+            client.print(ultrasoonSensor);
             client.print("CM");
             client.println();
             

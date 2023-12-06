@@ -1,18 +1,37 @@
-#include <Arduino.h>
+#include "mainHeader.h"
 
-// put function declarations here:
-int myFunction(int, int);
+struct CarData
+{
+  bool start = false;
+  int irData1 = 0;
+  int irData2 = 0;
+  int ulstrasoonData = 0;
+};
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
-}
+int main() 
+{
+  bool start = false;
+  int irData1 = 0;
+  int irData2 = 0;
+  int ulstrasoonData = 0;
 
-void loop() {
-  // put your main code here, to run repeatedly:
-}
+  WifiEsp* wifi = new WifiEsp();
+  wifi->wifi_Innit();
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  while(1)
+  {
+    if(start)
+    {
+
+    }
+    else
+    {
+      move(STOP_MOVING);
+    }
+
+    wifi->loopWifi(irData1, irData2, ulstrasoonData);
+  }
+
+  delete wifi;
+  return 0;
 }

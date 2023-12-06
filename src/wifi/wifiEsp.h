@@ -1,7 +1,20 @@
+#pragma once
 #ifndef _WIFIESP_H_
 #define _WIFIESP_H_
 
-void wifi_Innit();
-bool loopWifi(int ir1, int ir2, int uds);
+#include <Arduino.h>
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <WiFiAP.h>
+class WifiEsp
+{
+private:
+    const char *ssid = "bomba";
+    const char *password = "bomba";
+
+public:
+    void wifi_Innit();
+    bool loopWifi(int ir1, int ir2, int uds);
+};
 
 #endif

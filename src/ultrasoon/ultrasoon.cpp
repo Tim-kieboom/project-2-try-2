@@ -19,16 +19,16 @@ void ultrasoonStartup()
 
 int readUltrasoon()
 {
-  static uint64_t beginTime = micros();
-  static uint64_t timeNow = 0;
+  static Timer timer_us = Timer(SET_TIMER_IN_US);
+  timer_us.startTimer();
 
   static int step = 0;
   static ultrasoonMode mode = begin;
 
-  WAIT_US(1)
+  if( timer_us.waitTime(1) )
   {
     step++;
-    beginTime = micros();
+    timer_us.resetBeginTime();
   }
 
   switch (mode)
@@ -101,4 +101,6 @@ bool soon_Detect(int distance)
     safetyBuffer = 0;
     return true;
   }
+
+  return false;
 }
