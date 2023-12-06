@@ -3,35 +3,44 @@
 struct CarData
 {
   bool start = false;
-  int irData1 = 0;
-  int irData2 = 0;
+  uint8_t irData1 = 0;
+  uint8_t irData2 = 0;
   int ulstrasoonData = 0;
 };
 
+void init()
+{
+  ultrasoonStartup();
+  IR_Innit();
+}
+
+void carLogic(CarData* data)
+{
+  if(data->start)
+  {
+
+  }
+  else
+  {
+    move(STOP_MOVING);
+  }
+}
+
 int main() 
 {
-  bool start = false;
-  int irData1 = 0;
-  int irData2 = 0;
-  int ulstrasoonData = 0;
-
+  CarData* data = new CarData();
   WifiEsp* wifi = new WifiEsp();
   wifi->wifi_Innit();
-
+  init();
+  
   while(1)
   {
-    if(start)
-    {
+    carLogic(data);
 
-    }
-    else
-    {
-      move(STOP_MOVING);
-    }
-
-    wifi->loopWifi(irData1, irData2, ulstrasoonData);
+    data->start = wifi->loopWifi(data->irData1, data->irData2, data->ulstrasoonData);
   }
 
+  delete data;
   delete wifi;
   return 0;
 }

@@ -3,13 +3,6 @@
 
 static int readDistance = 0;
 
-enum ultrasoonMode
-{
-  begin = 0,
-  sendSound = 1,
-  readTheDistance = 2,
-  reset = 3
-};
 
 void ultrasoonStartup()
 {

@@ -13,7 +13,7 @@ void WifiEsp::wifi_Innit()
   Serial.println("connection made");
 }
 
-bool WifiEsp::loopWifi(int ir1, int ir2, int ultrasoonSensor) 
+bool WifiEsp::loopWifi(uint8_t ir1, uint8_t ir2, int ultrasoonSensor) 
 {
   int returnValue = 0;
   WiFiClient client = server.available();

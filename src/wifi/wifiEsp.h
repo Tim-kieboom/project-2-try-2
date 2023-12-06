@@ -14,7 +14,7 @@ private:
 
 public:
     void wifi_Innit();
-    bool loopWifi(int ir1, int ir2, int uds);
+    bool loopWifi(uint8_t ir1, uint8_t ir2, int uds);
 };
 
 #endif
