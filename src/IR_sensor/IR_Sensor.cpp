@@ -28,8 +28,8 @@ void printIR_Data()
 {
     int* IRs = checkIR();
 
-    String part1 = "[IR"
-    String part2 = "]: "
+    String part1 = "[IR";
+    String part2 = "]: ";
 
     String message = "";
 

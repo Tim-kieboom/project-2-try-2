@@ -58,11 +58,11 @@ void carLogic(CarData* data)
   }
   else
   {
-    move(STOP_MOVING, 0);
+    moveCar(STOP_MOVING, 0);
   }
 }
 
-int main() 
+void setup() 
 {
   CarData* data = new CarData();
   WifiEsp* wifi = new WifiEsp();
@@ -85,5 +85,6 @@ int main()
 
   delete data;
   delete wifi;
-  return 0;
 }
+
+void loop(){}

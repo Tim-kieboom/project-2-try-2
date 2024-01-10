@@ -25,7 +25,7 @@
 #define ENB                         19                     
 
 void motorInnit();
-void move(int mode, int speed);
+void moveCar(uint8_t mode, int speed);
 void testMotor();
 
 #endif
