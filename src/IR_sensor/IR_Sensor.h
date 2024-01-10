@@ -10,7 +10,7 @@
 #define WALL_DETECTED   6
 
 void IR_Innit();
-int checkIR();
+uint8_t checkIR();
 void printIR_Data();
 
 #endif

@@ -8,7 +8,7 @@
 #define TRIGGER_PIN 17
 #define ECHO_PIN 16
 
-#define SET_TIMER_IN_MS TRUE
+#define SET_TIMER_IN_MS true
 #define SET_TIMER_IN_US false
 
 #include "Timer/Timer.h"

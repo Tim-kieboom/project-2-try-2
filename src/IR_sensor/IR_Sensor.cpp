@@ -3,6 +3,8 @@
 
 #define RECIEVER_PIN_IR1            36  
 #define RECIEVER_PIN_IR2            39   
+#define RECIEVER_PIN_IR3            40 
+#define RECIEVER_PIN_IR4            41
 
 void IR_Innit()
 {
@@ -10,28 +12,35 @@ void IR_Innit()
     pinMode(RECIEVER_PIN_IR2, INPUT);
 }
 
-int checkIR()
+int* checkIR()
 {
-    if(digitalRead(RECIEVER_PIN_IR1) == LOW && digitalRead(RECIEVER_PIN_IR2) == LOW)
-    {
-        return FORWARD;
-    }   
-    else if(digitalRead(RECIEVER_PIN_IR1) == LOW)
-    {
-        return TURN_RIGHT;
-    }
-    else if(digitalRead(RECIEVER_PIN_IR2) == LOW)
-    {
-        return TURN_LEFT;
-    }
+    int* IRs = new int[4];
 
-    return WALL_DETECTED;
+    IRs[0] = digitalRead(RECIEVER_PIN_IR1);
+    IRs[1] = digitalRead(RECIEVER_PIN_IR2);
+    IRs[2] = digitalRead(RECIEVER_PIN_IR3);
+    IRs[3] = digitalRead(RECIEVER_PIN_IR4);
+
+    return IRs;
 }
 
 void printIR_Data()
 {
-    String IR1 = String(digitalRead(RECIEVER_PIN_IR1));
-    String IR2 = String(digitalRead(RECIEVER_PIN_IR2));
+    int* IRs = checkIR();
 
-    Serial.println("[IR1]: " + IR1 + ", [IR2]: " + IR2);
+    String part1 = "[IR"
+    String part2 = "]: "
+
+    String message = "";
+
+    for(int i = 0; i < sizeof(IRs); i++)
+    {
+        message += part1 + String(i) + part2;
+
+        message +=  String(IRs[i]);       
+    }
+
+    Serial.println(message);
+
+    delete[] IRs;
 }

@@ -58,7 +58,7 @@ void carLogic(CarData* data)
   }
   else
   {
-    move(STOP_MOVING);
+    move(STOP_MOVING, 0);
   }
 }
 
