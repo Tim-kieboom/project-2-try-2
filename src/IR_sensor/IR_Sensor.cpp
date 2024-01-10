@@ -28,16 +28,13 @@ void printIR_Data()
 {
     int* IRs = checkIR();
 
-    String part1 = "[IR";
-    String part2 = "]: ";
-
     String message = "";
 
     for(int i = 0; i < sizeof(IRs); i++)
     {
-        message += part1 + String(i) + part2;
+        message += "[IR" + String(i) + "]: ";
 
-        message +=  String(IRs[i]);       
+        message +=  String(IRs[i]), ", ";       
     }
 
     Serial.println(message);
