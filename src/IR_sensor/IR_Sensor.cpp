@@ -21,7 +21,7 @@ int* checkIR()
     IRs[3] = digitalRead(RECIEVER_PIN_IR4);
 
     //this is a sentinel value to mark the end of the array
-    IRs[4] = -69;
+    IRs[4] = sentinelValue;
 
     return IRs;
 }

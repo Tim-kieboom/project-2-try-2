@@ -23,6 +23,6 @@ enum ultrasoonMode
 
 void ultrasoonStartup();
 int readUltrasoon();
-bool soon_Detect(int distance);
+bool ultrasoonDetectAtDistance(int distance_cm);
 
 #endif
