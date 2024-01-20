@@ -13,67 +13,141 @@ void WifiEsp::wifi_Innit()
   Serial.println("connection made");
 }
 
-bool WifiEsp::loopWifi(uint8_t ir1, uint8_t ir2, int ultrasoonSensor) 
+bool WifiEsp::loopWifi()
 {
   int returnValue = 0;
   WiFiClient client = server.available();
 
-  if (client) 
+  if (!client) 
+    return returnValue;
+
+  
+  String currentLine = "";
+
+  while (client.connected()) 
   {
-    Serial.println("New Client.");
-    String currentLine = "";
-    while (client.connected()) 
+    if (client.available()) 
     {
-      if (client.available()) 
+      char c = client.read();
+      Serial.write(c);
+      if (c == '\n') 
       {
-        char c = client.read();
-        Serial.write(c);
-        if (c == '\n') 
+        if (currentLine.length() == 0) 
         {
-          if (currentLine.length() == 0) 
-          {
-            client.println("HTTP/1.1 200 OK");
-            client.println("Content-type:text/html");
-            client.println();
-            client.print("<head><meta http-equiv=\"refresh\" content=\"1\"></head>");
-            client.print("Click <a href=\"/ON\">here</a> to turn ON the ACM.<br>");
-            client.print("Click <a href=\"/STOP\">here</a> to turn OFF the ACM.<br>");
-            client.print("Infrarood Sensor 1: ");
-            client.print(ir1);
-            client.print("<br>");
-            client.print("InfraRood 2: ");
-            client.print(ir2);
-            client.print("<br>");
-            client.print("Ultrasonische Afstands Sensor: ");
-            client.print(ultrasoonSensor);
-            client.print("CM");
-            client.println();
-            
-            break;
-          } 
-          else 
-          {
-            currentLine = "";
-          }
-        } 
-        else if (c != '\r') 
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          client.print("<head><meta http-equiv=\"refresh\" content=\"1\"></head>");
+          client.print("Click <a href=\"/ON\">here</a> to turn ON the ACM.<br>");
+          client.print("Click <a href=\"/STOP\">here</a> to turn OFF the ACM.<br>");
+        }
+        else 
         {
-          currentLine += c;
+          currentLine = "";
         }
       }
-
-      if (currentLine.endsWith("GET /ON")) 
+      else if (c != '\r') 
       {
-        Serial.print("ON");
-        returnValue = 1;
-      } 
-      if (currentLine.endsWith("GET /STOP")) 
-      {
-        Serial.print("STOP");
-        returnValue = 2;
+        currentLine += c;
       }
     }
-    client.stop();
+
+    if (currentLine.endsWith("GET /ON")) 
+    {
+      Serial.print("ON");
+      returnValue = 1;
+    } 
+    if (currentLine.endsWith("GET /STOP")) 
+    {
+      Serial.print("STOP");
+      returnValue = 2;
+    }
   }
+
+  client.stop();
+
   return returnValue;
+
+}
+
+bool WifiEsp::loopWifi(int ultrasoonSensor, bool REED, int* irArray) 
+{
+  int returnValue = 0;
+  WiFiClient client = server.available();
+
+  if (!client) 
+    return returnValue;
+
+  Serial.println("New Client.");
+  String currentLine = "";
+
+  while (client.connected()) 
+  {
+    if (client.available()) 
+    {
+      char c = client.read();
+      Serial.write(c);
+      if (c == '\n') 
+      {
+        if (currentLine.length() == 0) 
+        {
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-type:text/html");
+          client.println();
+          client.print("<head><meta http-equiv=\"refresh\" content=\"1\"></head>");
+          client.print("Click <a href=\"/ON\">here</a> to turn ON the ACM.<br>");
+          client.print("Click <a href=\"/STOP\">here</a> to turn OFF the ACM.<br>");
+          client.print(printIR_Data(irArray));
+          client.print("Ultrasonische Afstands Sensor: ");
+          client.print(ultrasoonSensor + "CM");
+          client.print("REED Sensor: ");
+          
+          String reedMessage = (REED) ? "true" : "false";
+          client.println(reedMessage);
+          
+          break;
+        } 
+        else 
+        {
+          currentLine = "";
+        }
+      } 
+      else if (c != '\r') 
+      {
+        currentLine += c;
+      }
+    }
+
+    if (currentLine.endsWith("GET /ON")) 
+    {
+      Serial.print("ON");
+      returnValue = 1;
+    } 
+    if (currentLine.endsWith("GET /STOP")) 
+    {
+      Serial.print("STOP");
+      returnValue = 2;
+    }
+  }
+  client.stop();
+  
+  return returnValue;
+}
+
+String WifiEsp::printIR_Data(int* irArray)
+{
+  String message = "";
+
+  uint8_t i = 0;
+
+  while(irArray[i] != -69)
+  {
+    message += "Infrarood Sensor " + String(i+1) + ": ";
+    message += irArray[i];
+    message += "<br>";
+  
+    i++;
+  }
+
+  return message;
 }

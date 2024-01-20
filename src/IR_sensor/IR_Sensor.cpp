@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include "mainHeader.h"
 
 #define RECIEVER_PIN_IR1            36  
 #define RECIEVER_PIN_IR2            39   
@@ -14,12 +13,15 @@ void IR_Innit()
 
 int* checkIR()
 {
-    int* IRs = new int[4];
+    int* IRs = new int[5];
 
     IRs[0] = digitalRead(RECIEVER_PIN_IR1);
     IRs[1] = digitalRead(RECIEVER_PIN_IR2);
     IRs[2] = digitalRead(RECIEVER_PIN_IR3);
     IRs[3] = digitalRead(RECIEVER_PIN_IR4);
+
+    //this is a sentinel value to mark the end of the array
+    IRs[4] = -69;
 
     return IRs;
 }
@@ -41,3 +43,4 @@ void printIR_Data()
 
     delete[] IRs;
 }
+ 

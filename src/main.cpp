@@ -1,90 +1,217 @@
-#include "mainHeader.h"
+#include <Arduino.h>
+#include "CarData.h"
+#include "debug/debug.h"
+#include "motor/motor.h"
+#include "Timer/Timer.h"
+#include "wifi/wifiEsp.h"
+#include "IR_sensor/IR_Sensor.h"
+#include "ultrasoon/ultrasoon.h"
 
-struct CarData
+#define REED_PIN 18
+
+enum CarState
 {
-  bool start = false;
-  uint8_t irData1 = 0;
-  uint8_t irData2 = 0;
-  int ulstrasoonData = 0;
+  driveForward,
+  lineAtBack,
+  lineAtLeft,
+  lineAtRight,
+  lineAtFrontFirst,
+  lineAtFrontSecond,
+  detectedObstacle,
+  end
 };
 
-void init()
+void init(WifiEsp* wifi)
 {
   Serial.begin(115200);
   Serial.println("starting");
 
+  wifi->wifi_Innit();
+
+  pinMode(REED_PIN, OUTPUT);
   ultrasoonStartup();
   IR_Innit();
+  motorInnit();
 }
 
-void printUltrasoon()
+bool moveAndWait_ms(int mode , int time_ms)
 {
-  static Timer timer = Timer(SET_TIMER_IN_MS);
-  timer.updateTimer();
+  static Timer* timer = new Timer(SET_TIMER_IN_MS);
+  moveCar(mode);
   
-  if(timer.waitTime(200))
+  if(timer->waitTime(time_ms))
+  {  
+    delete timer;
+    return true;
+  }
+
+  return false;
+}
+
+bool backAndRight()
+{
+  static int step = 0;
+  static int move = BACKWARD;
+
+  if(moveAndWait_ms(BACKWARD, 20/*ms*/))
+    step++;
+
+  switch(step)
   {
-    Serial.println(readUltrasoon());
-    timer.resetBeginTime();
+    case 0:
+      move = BACKWARD;
+      break;
+
+    case 1:
+      move = RIGHT;
+      break;
+
+    case 2: //reset
+      move = BACKWARD;
+      step = 0;
+      return true;
+  }
+
+  return false;
+}
+
+void carDoesState(CarState &carState)
+{
+  bool isDone       = false;
+  bool isDoneSecond = false;
+
+  switch(carState)
+  {
+    case driveForward: //go forward
+      moveCar(FORWARD);
+      break;
+
+    case lineAtBack: //go forward
+      carState = driveForward;
+      break;
+
+    case lineAtRight: //go left
+      if(moveAndWait_ms(LEFT, 20/*ms*/))
+        carState = driveForward;
+      break;
+
+    case lineAtLeft: //go right
+      if(moveAndWait_ms(RIGHT, 20/*ms*/))
+        carState = driveForward;
+      break;
+
+    case lineAtFrontFirst: //go back and then right
+      isDone = backAndRight();
+
+      if(isDone)
+        carState = driveForward;
+      break;
+
+    case lineAtFrontSecond: //go back, right and then left
+      isDone       = backAndRight();
+      isDoneSecond = false;
+
+      if(isDone)
+        isDoneSecond = moveAndWait_ms(LEFT, 20/*ms*/);
+
+      if(isDoneSecond)
+        carState = driveForward;
+      break;
+
+
+    case end: //stop moveing
+      moveCar(STOP_MOVING);
+      break;
+  }
+
+}
+
+void checkIR_Sensors(int* IRs, CarState &carState)
+{
+  if(IRs[BACKWARD] > 0)
+    carState = lineAtBack;
+
+  else if(IRs[RIGHT] > 0)
+    carState = lineAtRight;
+
+  else if(IRs[LEFT] > 0)
+    carState = lineAtLeft;
+
+  else if(IRs[FORWARD] > 0)
+  { 
+    if(carState == lineAtFrontFirst)  
+      carState = lineAtFrontSecond;
+
+    carState = lineAtFrontFirst;
   }
 }
 
-void printIR_Sensors()
-{
-  static Timer timer = Timer(SET_TIMER_IN_MS);
-  timer.updateTimer();
+void getSensorData(CarData* data)
+{ 
+  int* oldIRs   = data->irArray;
 
-  if(timer.waitTime(200))
-  {
-    printIR_Data();
-    timer.resetBeginTime();
-  }
-}
+  data->REED           = digitalRead(REED_PIN);
+  data->irArray        = checkIR();
+  data->ulstrasoonData = readUltrasoon();
 
-void debugSensors()
-{
-  while(1)
-  {
-    printUltrasoon();
-    printIR_Data();
-  }
+  delete[] oldIRs;
 }
 
 void carLogic(CarData* data)
 {
-  if(data->start)
-  {
+  static CarState carState = driveForward;
 
-  }
-  else
-  {
-    moveCar(STOP_MOVING, 0);
-  }
+  getSensorData(/*out*/data);
+
+  checkIR_Sensors(data->irArray, /*out*/carState);
+
+  if(ultrasoonDetectAtDistance(20/*cm*/))
+    carState = detectedObstacle;
+  
+  //zie aan bijdezijkanten lijn????
+
+  if(data->REED)
+    carState = end;
+
+  carDoesState(/*out*/carState);
+}
+
+bool sendData(CarData* data, WifiEsp* wifi)
+{
+  int* irArray = data->irArray;
+
+  if(irArray == NULL) //if start hasn't been turn on yet
+    return wifi->loopWifi();
+
+  return wifi->loopWifi
+  (
+    data->ulstrasoonData,
+    data->REED,
+    irArray
+  );
 }
 
 void setup() 
 {
   CarData* data = new CarData();
   WifiEsp* wifi = new WifiEsp();
-  wifi->wifi_Innit();
-  init();
+  init(/*out*/wifi);
 
-  testMotor();
+  //testMotor();
 
   while(1)
   {
-    carLogic(data);
+    data->start = sendData(data, wifi);
 
-    data->start = wifi->loopWifi
-    (
-      data->irData1, 
-      data->irData2, 
-      data->ulstrasoonData
-    );
+    if(!data->start)
+      continue;
+
+    carLogic(/*out*/data);
   }
 
   delete data;
   delete wifi;
 }
 
+//void loop() is dumb: made by void setup() enjoyer :) ;) :) ;)
 void loop(){}

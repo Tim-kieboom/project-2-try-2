@@ -13,16 +13,12 @@ void ultrasoonStartup()
 int readUltrasoon()
 {
   static Timer timer_us = Timer(SET_TIMER_IN_US);
-  timer_us.startTimer();
 
   static int step = 0;
   static ultrasoonMode mode = begin;
 
   if( timer_us.waitTime(1) )
-  {
     step++;
-    timer_us.resetBeginTime();
-  }
 
   switch (mode)
   {
@@ -32,7 +28,7 @@ int readUltrasoon()
       break;
     
     case sendSound:
-      if(step >= 2)
+      if(step < 2)
       {
         digitalWrite(TRIGGER_PIN, HIGH);
         mode = readTheDistance;
@@ -64,7 +60,7 @@ int readUltrasoon()
   return READING_NOT_FOUND;
 }
 
-bool soon_Detect(int distance)
+bool ultrasoonDetectAtDistance(int distance_cm)
 {
   static int timer = 0;
   static int safetyBuffer = 0;
@@ -79,7 +75,7 @@ bool soon_Detect(int distance)
   
   timer++;
 
-  if(newDistance <= distance && readDistance != 0)
+  if(newDistance <= distance_cm && readDistance != 0)
   {
     safetyBuffer++;
   }

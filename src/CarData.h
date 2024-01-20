@@ -4,13 +4,12 @@
 
 #include <cstdint>
 
-class CarData
+struct CarData
 {
-public:
   bool start = false;
-  uint8_t irData1 = 0;
-  uint8_t irData2 = 0;
+  int* irArray;
   int ulstrasoonData = 0;
+  bool REED = false;
 };
 
 #endif

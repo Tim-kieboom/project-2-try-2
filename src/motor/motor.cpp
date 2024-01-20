@@ -1,15 +1,6 @@
 #include <Arduino.h>
 #include "motor.h"
 
-//PIN1 HIGH, PIN2 LOW: turn motor clockwise(clw)
-//PIN2 HIGH, PIN1 LOW: turn motor counter_clockwise(c_clw)
-
-//A(clock wise),            B(clock wise):             forward
-//A(counter_clock wise),    B(counter_clock wise):     backwards
-
-//A(clock wise),            B(counter_clock wise):     turn Right
-//A(counter_clock wise),    B(clock wise):             turn left
-
 static const int frequency = 500;
 static const int resolution = 8;
 static const uint8_t channel_A = 0;
@@ -27,14 +18,19 @@ void motorInnit()
     pinMode(ENA, OUTPUT);
     pinMode(ENB, OUTPUT);
 
-    ledcAttachPin(ENA, channel_A);
-    ledcSetup(channel_A, frequency, resolution);
-    ledcAttachPin(ENB, channel_B);
-    ledcSetup(channel_B, frequency, resolution);
 }
 
-void moveMotor(uint8_t motorPin1, uint8_t motorPin2, uint8_t mode)
+void moveMotor(bool motor, uint8_t mode)
 {
+    /*
+        if PIN1 = HIGH & PIN2 = LOW:  motor turns clockwise
+
+        if PIN1 = LOW  & PIN2 = HIGH: motor turns counter_clockwise
+    */
+
+    uint8_t motorPin1 = (motor == MOTOR_A) ? MOTOR_A_PIN1 : MOTOR_B_PIN1;
+    uint8_t motorPin2 = (motor == MOTOR_B) ? MOTOR_A_PIN2 : MOTOR_B_PIN2;
+
     switch (mode)
     {
         case CLOCK_WISE:
@@ -57,79 +53,78 @@ void moveMotor(uint8_t motorPin1, uint8_t motorPin2, uint8_t mode)
     }
 }
 
-void moveCar(uint8_t mode, int speed)
+void moveCar(uint8_t mode)
 {
+    /*
+        only if ENA == HIGH: motor_a(A) can move 
+
+        only if ENB == HIGH: motor_b(B) can move 
+
+
+        A(clock wise),            B(clock wise):             forward
+        A(counter_clock wise),    B(counter_clock wise):     backwards
+
+        A(clock wise),            B(counter_clock wise):     turn Right
+        A(counter_clock wise),    B(clock wise):             turn left
+    */
 
     switch (mode)
     {
         case FORWARD:
-            moveMotor(MOTOR_A_PIN1, MOTOR_A_PIN2, CLOCK_WISE); 
-              
-            moveMotor(MOTOR_B_PIN1, MOTOR_B_PIN2, CLOCK_WISE); 
-
-            ledcWrite(channel_A,(255*speed));
-            ledcWrite(channel_B,(255*speed));
+            moveMotor(MOTOR_A, CLOCK_WISE); 
+            moveMotor(MOTOR_B, CLOCK_WISE); 
             break;
         
         case BACKWARD:
-            moveMotor(MOTOR_A_PIN1, MOTOR_A_PIN2, COUNTER_CLOCK_WISE);  
-
-            moveMotor(MOTOR_B_PIN1, MOTOR_B_PIN2, COUNTER_CLOCK_WISE); 
-
-            ledcWrite(channel_A,(255*speed));
-            ledcWrite(channel_B,(255*speed));     
+            moveMotor(MOTOR_A, COUNTER_CLOCK_WISE);  
+            moveMotor(MOTOR_B, COUNTER_CLOCK_WISE);  
             break;
         
-        case TURN_LEFT:
-            moveMotor(MOTOR_A_PIN1, MOTOR_A_PIN2, COUNTER_CLOCK_WISE);  
-
-            moveMotor(MOTOR_B_PIN1, MOTOR_B_PIN2, CLOCK_WISE);
-
-            ledcWrite(channel_A,(255*speed));
-            ledcWrite(channel_B,(255*speed));  
+        case LEFT:
+            moveMotor(MOTOR_A, COUNTER_CLOCK_WISE);  
+            moveMotor(MOTOR_B, CLOCK_WISE);
             break;
 
-        case TURN_RIGHT:
-            moveMotor(MOTOR_A_PIN1, MOTOR_A_PIN2, CLOCK_WISE); 
-
-            moveMotor(MOTOR_B_PIN1, MOTOR_B_PIN2, COUNTER_CLOCK_WISE); 
-
-            ledcWrite(channel_A,(255*speed));
-            ledcWrite(channel_B,(255*speed));
+        case RIGHT:
+            moveMotor(MOTOR_A, CLOCK_WISE); 
+            moveMotor(MOTOR_B, COUNTER_CLOCK_WISE); 
             break; 
             
         case STOP_MOVING:
-            moveMotor(MOTOR_A_PIN1, MOTOR_A_PIN2, MOTOR_OFF); 
-   
-            moveMotor(MOTOR_B_PIN1, MOTOR_B_PIN2, MOTOR_OFF); 
-  
-            ledcWrite(channel_A,(0));
-            ledcWrite(channel_B,(0));
-            break;
+            moveMotor(MOTOR_A, MOTOR_OFF); 
+            moveMotor(MOTOR_B, MOTOR_OFF); 
+
+            digitalWrite(ENA, LOW);
+            digitalWrite(ENB, LOW);
+            return;
 
     }
+
+    digitalWrite(ENA, HIGH);
+    digitalWrite(ENB, HIGH);
+
 }
 
 void testMotor()
 {
-    moveCar(FORWARD, 1);
+    moveCar(FORWARD);
     delay(2000);
-    moveCar(STOP_MOVING, 0);
-    delay(2000);
-
-    moveCar(BACKWARD, 1);
-    delay(2000);
-    moveCar(STOP_MOVING, 0);
+    moveCar(STOP_MOVING);
     delay(2000);
 
-    moveCar(TURN_LEFT, 1);
+    moveCar(BACKWARD);
     delay(2000);
-    moveCar(STOP_MOVING, 0);
+    moveCar(STOP_MOVING);
     delay(2000);
 
-    moveCar(TURN_RIGHT, 1);
+    moveCar(LEFT);
     delay(2000);
-    moveCar(STOP_MOVING,0);
+    moveCar(STOP_MOVING);
+    delay(2000);
+
+    moveCar(RIGHT);
+    delay(2000);
+    moveCar(STOP_MOVING);
     delay(2000);
 }
 

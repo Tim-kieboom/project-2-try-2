@@ -14,7 +14,11 @@ private:
 
 public:
     void wifi_Innit();
-    bool loopWifi(uint8_t ir1, uint8_t ir2, int uds);
+    bool loopWifi();
+    bool loopWifi(int ultrasoonSensor, bool REED, int* irArray);
+
+private:
+    String printIR_Data(int* irArray);
 };
 
 #endif

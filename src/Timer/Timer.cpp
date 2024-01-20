@@ -17,6 +17,19 @@ void Timer::updateTimer()
     timeNow = getCurrentTime();
 }
 
+bool Timer::waitTime(int time)
+{
+    updateTimer();
+    
+    if(timeNow - timeBegin > time)
+    {
+        resetBeginTime();
+        return true;
+    }
+
+    return false;
+}
+
 void Timer::resetBeginTime()
 {
     timeBegin = getCurrentTime();
