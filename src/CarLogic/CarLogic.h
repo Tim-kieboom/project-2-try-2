@@ -1,3 +1,4 @@
+#pragma once
 #ifndef _CARLOGIC_H_
 #define _CARLOGIC_H_
 

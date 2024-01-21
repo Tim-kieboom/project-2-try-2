@@ -9,7 +9,7 @@
 #define STOP_MOVING     4
 #define WALL_DETECTED   5
 
-#define sentinelValue  -1
+#define SENTINEL_VALUE -1
 
 
 void IR_Innit();

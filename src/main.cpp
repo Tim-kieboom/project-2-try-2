@@ -17,42 +17,52 @@ void init(WifiEsp* wifi)
   motorInnit();
 }
 
-bool sendData(CarData* data, WifiEsp* wifi)
+bool sendData(CarData* carData, WifiEsp* wifi)
 {
-  int* irArray = data->irArray;
+  int* irArray = carData->irArray;
 
-  if(irArray[0] == sentinelValue) //if irArray is empty(so start hasn't been pressed yet)
+  if(irArray[0] == SENTINEL_VALUE) //if irArray is empty(so start hasn't been pressed yet)
     return wifi->loopWifi();
 
   return wifi->loopWifi
   (
-    data->ulstrasoonData,
-    data->REED,
+    carData->ulstrasoonData,
+    carData->REED,
     irArray
   );
 }
 
 void setup() 
 {
-  CarData* data = new CarData();
+  CarData* carData = new CarData();
   WifiEsp* wifi = new WifiEsp();
   init(/*out*/wifi);
+
+  bool start = false;
 
   //testMotor();
 
   while(1)
   {
-    data->start = sendData(data, wifi);
+    int wifiState = sendData(carData, wifi);
+    
+    if(wifiState == START)
+    {  
+      start = true;
+    }
+    else if(wifiState == STOP)
+    {  
+      break;
+    }
 
-    if(!data->start)
+    if(!start)
       continue;
 
-    carLogic(/*out*/data);
+    carLogic(/*out*/carData);
   }
 
-  delete data;
+  delete carData;
   delete wifi;
 }
 
-//void loop() is dumb: made by void setup() enjoyer :) ;) :) ;)
 void loop(){}

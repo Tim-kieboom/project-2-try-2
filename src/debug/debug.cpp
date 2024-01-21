@@ -6,7 +6,7 @@ void printUltrasoon()
   
   if(timer.waitTime(200))
   {
-    Serial.println(readUltrasoon());
+    Serial.println(readUltrasoon_cm());
   }
 }
 
@@ -22,9 +22,6 @@ void printIR_Sensors()
 
 void debugSensors()
 {
-  while(1)
-  {
-    printUltrasoon();
-    printIR_Data();
-  }
+  printUltrasoon();
+  printIR_Data();
 }

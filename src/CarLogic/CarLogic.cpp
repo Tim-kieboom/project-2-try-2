@@ -14,7 +14,11 @@ enum CarState
 
 bool moveAndWait_ms(int mode , int time_ms)
 {
-  static Timer* timer = new Timer(SET_TIMER_IN_MS);
+  static Timer* timer = NULL;
+
+  if(timer == NULL)
+    timer = new Timer(SET_TIMER_IN_MS);
+
   moveCar(mode);
   
   if(timer->waitTime(time_ms))
@@ -53,10 +57,10 @@ bool backAndRight()
   return false;
 }
 
-void carDoesState(CarState &carState)
+void carDoesState(int &carState)
 {
-  bool isDone       = false;
-  bool isDoneSecond = false;
+  static bool isDone       = false;
+  static bool isDoneSecond = false;
 
   switch(carState)
   {
@@ -82,18 +86,27 @@ void carDoesState(CarState &carState)
       isDone = backAndRight();
 
       if(isDone)
+      {  
         carState = driveForward;
+        isDone = false;
+      }
       break;
 
     case lineAtFrontSecond: //go back, right and then left
-      isDone       = backAndRight();
-      isDoneSecond = false;
-
-      if(isDone)
-        isDoneSecond = moveAndWait_ms(LEFT, 20/*ms*/);
-
+      isDone = backAndRight();
+      
       if(isDoneSecond)
+      {
         carState = driveForward;
+        isDoneSecond = false;
+      }
+      
+      if(isDone)
+      {  
+        isDoneSecond = moveAndWait_ms(LEFT, 20/*ms*/);
+        isDone = false;
+      }
+
       break;
 
     case end: //stop moveing
@@ -102,15 +115,15 @@ void carDoesState(CarState &carState)
   }
 }
 
-void checkIR_Sensors(int* IRs, CarState &carState)
+void checkIR_Sensors(int* IRs, int &carState)
 {
-  if(IRs[BACKWARD] > 0)
+  if(IRs[BACKWARD]     > 0)
     carState = lineAtBack;
 
-  else if(IRs[RIGHT] > 0)
+  else if(IRs[RIGHT]   > 0)
     carState = lineAtRight;
 
-  else if(IRs[LEFT] > 0)
+  else if(IRs[LEFT]    > 0)
     carState = lineAtLeft;
 
   else if(IRs[FORWARD] > 0)
@@ -122,31 +135,31 @@ void checkIR_Sensors(int* IRs, CarState &carState)
   }
 }
 
-void getSensorData(CarData* data)
+void getSensorData(CarData* carData)
 { 
-  int* oldIRs   = data->irArray;
+  int* oldIRs   = carData->irArray;
 
-  data->REED           = digitalRead(REED_PIN);
-  data->irArray        = checkIR();
-  data->ulstrasoonData = readUltrasoon();
+  carData->REED           = digitalRead(REED_PIN);
+  carData->irArray        = checkIR();
+  carData->ulstrasoonData = readUltrasoon_cm();
 
   delete[] oldIRs;
 }
 
-void carLogic(CarData* data)
+void carLogic(CarData* carData)
 {
-  static CarState carState = driveForward;
+  static int carState = driveForward;
 
-  getSensorData(/*out*/data);
+  getSensorData(/*out*/carData);
 
-  checkIR_Sensors(data->irArray, /*out*/carState);
+  checkIR_Sensors(carData->irArray, /*out*/carState);
 
-  if(ultrasoonDetectAtDistance(20/*cm*/))
+  if(ultrasoonDetectAtDistance_cm(20))
     carState = detectedObstacle;
   
   //zie aan bijde zijkanten zwarte lijn????
 
-  if(data->REED)
+  if(carData->REED)
     carState = end;
 
   carDoesState(/*out*/carState);

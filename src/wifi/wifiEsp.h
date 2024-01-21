@@ -6,6 +6,11 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include <WiFiAP.h>
+
+#define IDLE    0
+#define START   1
+#define STOP    2 
+
 class WifiEsp
 {
 private:
@@ -13,12 +18,16 @@ private:
     const char *password = "bomba";
 
 public:
-    void wifi_Innit();
-    bool loopWifi();
-    bool loopWifi(int ultrasoonSensor, bool REED, int* irArray);
+    //need to call serial.begin(buadrate); to make this methode work
+    void wifi_Innit(); 
+
+    int loopWifi();
+    int loopWifi(int ultrasoonSensor, bool REED, int* irArray);
 
 private:
     String printIR_Data(int* irArray);
+    void printBaseHtml(WiFiClient &client);
+
 };
 
 #endif

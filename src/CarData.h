@@ -3,8 +3,7 @@
 #define CARDATA_H
 
 #include <cstdint>
-
-#define sentinelValue -1
+#include "IR_sensor/IR_sensor.h"
 
 struct CarData
 {
@@ -13,12 +12,11 @@ struct CarData
     irArray = new int[1];
     
     //the sentinelValue is to notify the person using this struct that the array is empty
-    irArray[0] = sentinelValue; 
+    irArray[0] = SENTINEL_VALUE; 
   }
 
   int* irArray;
   bool REED = false;
-  bool start = false;
   int ulstrasoonData = 0;
 };
 

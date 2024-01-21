@@ -10,7 +10,7 @@ void ultrasoonStartup()
   pinMode(ECHO_PIN, INPUT);
 }
 
-int readUltrasoon()
+int readUltrasoon_cm()
 {
   static Timer timer_us = Timer(SET_TIMER_IN_US);
 
@@ -60,11 +60,11 @@ int readUltrasoon()
   return READING_NOT_FOUND;
 }
 
-bool ultrasoonDetectAtDistance(int distance_cm)
+bool ultrasoonDetectAtDistance_cm(int distance_cm)
 {
   static int timer = 0;
   static int safetyBuffer = 0;
-  int newDistance = readUltrasoon();
+  int newDistance = readUltrasoon_cm();
 
   if(newDistance == READING_NOT_FOUND)
     return false;
