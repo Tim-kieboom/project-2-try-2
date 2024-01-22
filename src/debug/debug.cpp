@@ -2,26 +2,45 @@
 
 void printUltrasoon()
 {
-  static Timer timer = Timer(SET_TIMER_IN_MS);
-  
-  if(timer.waitTime(200))
-  {
-    Serial.println(readUltrasoon_cm());
-  }
+  int distance = readUltrasoon_cm();
+
+  if(distance == READING_NOT_FOUND)
+    return;
+
+  Serial.print("ultrasoon: ");
+  Serial.print(distance);
+  Serial.println("cm");
 }
 
-void printIR_Sensors()
+void debugUltrasoon(int time_ms)
+{
+  static Timer timer = Timer(SET_TIMER_IN_MS);
+  
+  if(timer.waitTime(time_ms))
+  {
+    printUltrasoon();
+  }
+
+}
+
+void debugIR(int time_ms)
 {
   static Timer timer = Timer(SET_TIMER_IN_MS);
 
-  if(timer.waitTime(200))
+  if(timer.waitTime(time_ms))
   {
     printIR_Data();
   }
 }
 
-void debugSensors()
+void debugSensors(int time_ms)
 {
-  printUltrasoon();
-  printIR_Data();
+  static Timer timer = Timer(SET_TIMER_IN_MS);
+
+  if(timer.waitTime(time_ms))
+  {  
+    printUltrasoon();
+    printIR_Data();
+    Serial.println();
+  }
 }

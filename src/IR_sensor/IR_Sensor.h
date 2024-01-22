@@ -3,9 +3,9 @@
 #define _IR_SENSOR_H_
 
 #define FORWARD         0
-#define BACKWARD        1
-#define TURN_LEFT       2
-#define TURN_RIGHT      3
+#define BACKWARD        3
+#define LEFT            1
+#define RIGHT           2
 #define STOP_MOVING     4
 #define WALL_DETECTED   5
 

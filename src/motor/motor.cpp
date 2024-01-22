@@ -29,7 +29,7 @@ void moveMotor(bool motor, uint8_t mode)
     */
 
     uint8_t motorPin1 = (motor == MOTOR_A) ? MOTOR_A_PIN1 : MOTOR_B_PIN1;
-    uint8_t motorPin2 = (motor == MOTOR_B) ? MOTOR_A_PIN2 : MOTOR_B_PIN2;
+    uint8_t motorPin2 = (motor == MOTOR_A) ? MOTOR_A_PIN2 : MOTOR_B_PIN2;
 
     switch (mode)
     {
@@ -107,25 +107,25 @@ void moveCar(uint8_t mode)
 
 void testMotor()
 {
-    moveCar(FORWARD);
-    delay(2000);
-    moveCar(STOP_MOVING);
-    delay(2000);
+    // moveCar(FORWARD);
+    // delay(2000);
+    // moveCar(STOP_MOVING);
+    // delay(2000);
 
-    moveCar(BACKWARD);
-    delay(2000);
-    moveCar(STOP_MOVING);
-    delay(2000);
+    // moveCar(BACKWARD);
+    // delay(2000);
+    // moveCar(STOP_MOVING);
+    // delay(2000);
 
     moveCar(LEFT);
     delay(2000);
-    moveCar(STOP_MOVING);
-    delay(2000);
+    // moveCar(STOP_MOVING);
+    // delay(2000);
 
     moveCar(RIGHT);
     delay(2000);
-    moveCar(STOP_MOVING);
-    delay(2000);
+    // moveCar(STOP_MOVING);
+    // delay(2000);
 }
 
 

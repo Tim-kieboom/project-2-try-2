@@ -91,8 +91,7 @@ int WifiEsp::loopWifi(int ultrasoonSensor, bool REED, int* irArray)
         client.print(ultrasoonSensor + "CM");
 
         client.print("REED Sensor: ");
-        String reedMessage = (REED) ? "true" : "false";
-        client.println(reedMessage);
+        client.println((REED) ? "true" : "false");
         
         break;
       } 

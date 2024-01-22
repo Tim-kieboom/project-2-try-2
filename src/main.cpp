@@ -40,20 +40,18 @@ void setup()
 
   bool start = false;
 
-  //testMotor();
+  while(1){testMotor();}
 
   while(1)
   {
+
     int wifiState = sendData(carData, wifi);
     
     if(wifiState == START)
-    {  
       start = true;
-    }
-    else if(wifiState == STOP)
-    {  
+
+    if(wifiState == STOP) 
       break;
-    }
 
     if(!start)
       continue;

@@ -9,7 +9,7 @@ Timer::Timer(bool isMillis)
 void Timer::startTimer()
 {
     timeBegin = getCurrentTime();
-    timeNow = getCurrentTime();
+    timeNow   = getCurrentTime();
 }
 
 void Timer::updateTimer()

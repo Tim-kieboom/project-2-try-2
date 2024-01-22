@@ -15,7 +15,7 @@ class WifiEsp
 {
 private:
     const char *ssid = "bomba";
-    const char *password = "bomba";
+    const char *password = "bombaBomba";
 
 public:
     //need to call serial.begin(buadrate); to make this methode work

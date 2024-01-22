@@ -12,12 +12,12 @@ void ultrasoonStartup()
 
 int readUltrasoon_cm()
 {
-  static Timer timer_us = Timer(SET_TIMER_IN_US);
+  static Timer* timer_us = new Timer(SET_TIMER_IN_US);
 
   static int step = 0;
-  static ultrasoonMode mode = begin;
+  static int mode = begin;
 
-  if( timer_us.waitTime(1) )
+  if( timer_us->waitTime(1) )
     step++;
 
   switch (mode)
@@ -28,7 +28,7 @@ int readUltrasoon_cm()
       break;
     
     case sendSound:
-      if(step < 2)
+      if(step >= 2)
       {
         digitalWrite(TRIGGER_PIN, HIGH);
         mode = readTheDistance;
@@ -39,11 +39,11 @@ int readUltrasoon_cm()
       if(step >= 10)
       {
         digitalWrite(TRIGGER_PIN, LOW);
-        mode = reset;
 
         int sensorOutput = pulseIn(ECHO_PIN, HIGH);
         int distance = CALULATE_DISTANCE(sensorOutput);
 
+        mode = reset;
         return distance;
       }
       break;

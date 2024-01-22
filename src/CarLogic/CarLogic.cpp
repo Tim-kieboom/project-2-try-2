@@ -12,6 +12,47 @@ enum CarState
   end
 };
 
+void printState(int carState)
+{
+  switch (carState) 
+  {
+  case driveForward:
+    Serial.println("driveForward");
+    break;
+
+  case lineAtBack:
+    Serial.println("lineAtBack");
+    break;
+  
+  case lineAtLeft:
+    Serial.println("lineAtLeft");
+    break;
+
+  case lineAtRight:
+    Serial.println("lineAtRight");
+    break;
+
+  case lineAtFrontFirst:
+    Serial.println("lineAtFrontFirst");
+    break;
+
+  case lineAtFrontSecond:
+    Serial.println("lineAtFrontSecond");
+    break;
+
+  case detectedObstacle:
+    Serial.println("detectedObstacle");
+    break;
+
+  case end:
+    Serial.println("end");
+    break;
+  
+  default:
+    break;
+  }
+}
+
 bool moveAndWait_ms(int mode , int time_ms)
 {
   static Timer* timer = NULL;
@@ -162,5 +203,6 @@ void carLogic(CarData* carData)
   if(carData->REED)
     carState = end;
 
+  //printState(carState);
   carDoesState(/*out*/carState);
 }

@@ -6,9 +6,9 @@
 #include "./IR_sensor/IR_Sensor.h"
 #include "./ultrasoon/ultrasoon.h"
 
-void debugSensors();
+void debugSensors(int time_ms);
 void printUltrasoon();
-void printIR_Sensors();
+void debugIR(int time_ms);
 
 
 #endif

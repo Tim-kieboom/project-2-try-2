@@ -5,8 +5,8 @@
 #define CALULATE_DISTANCE(outputSensor) (int)( (double)outputSensor * 0.01715 )
 
 #define READING_NOT_FOUND -69
-#define TRIGGER_PIN        17
-#define ECHO_PIN           16
+#define TRIGGER_PIN        4
+#define ECHO_PIN           5
 
 #define SET_TIMER_IN_MS true
 #define SET_TIMER_IN_US false
