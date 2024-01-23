@@ -41,8 +41,6 @@ void setup()
 
   bool start = false;
 
-  //while(1){testMotor();}
-
   while(1)
   {
     printState(carState);

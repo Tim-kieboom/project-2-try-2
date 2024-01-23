@@ -157,9 +157,9 @@ void carDoesState(int &carState)
   static bool isDone       = false;
   static bool isDoneSecond = false;
 
-  const uint32_t moveTime[] = {1000/*Back_ms*/, 1800/*turn1_ms*/, 1800/*turn2_ms*/};
+  uint32_t moveTime[3] = {0,0,0};
 
-  switch(carState)
+  switch(carState) 
   {
     case driveForward: //go forward
       moveCar(FORWARD);
@@ -171,16 +171,24 @@ void carDoesState(int &carState)
       break;
 
     case lineAtRight: //go left
+      moveTime[0/*backward*/] = 300 /*ms*/;
+      moveTime[1/*left*/]     = 1200/*ms*/;
+
       if(moveBackAnd(RIGHT, moveTime/*ms*/))
         carState = driveForward;
       break;
 
     case lineAtLeft: //go right
+      moveTime[0/*backward*/] = 300 /*ms*/;
+      moveTime[1/*right*/]    = 1200/*ms*/;
+
       if(moveBackAnd(LEFT, moveTime/*ms*/))
         carState = driveForward;
       break;
 
     case lineAtFrontFirst: //go back and then right
+      moveTime[0/*backward*/] = 600 /*ms*/;
+      moveTime[1/*right*/]    = 1600/*ms*/;
       
       isDone = backAndRight(moveTime/*ms*/);
 
@@ -192,6 +200,10 @@ void carDoesState(int &carState)
       break;
 
     case lineAtFrontSecond: //go back, right and then left
+      moveTime[0/*backward*/] = 600 /*ms*/;
+      moveTime[1/*right*/]    = 1600/*ms*/;
+      moveTime[2/*left*/]     = 1600/*ms*/;
+
       carState = lineAtFrontFirst; 
       break;
 
@@ -199,7 +211,7 @@ void carDoesState(int &carState)
         carState = driveForward;
       break;
 
-    case lineAtBothSides:
+    case lineAtBothSides:    
       isDone = moveAndWait_ms(BACKWARD, 800/*ms*/);
 
       if(isDoneSecond)
@@ -216,6 +228,9 @@ void carDoesState(int &carState)
       break;
 
     case detectedObstacle: //avoid obstikal
+      moveTime[0/*backward*/] = 600 /*ms*/;
+      moveTime[1/*right*/]    = 1600/*ms*/;
+
       isDone = backAndRight(moveTime/*ms*/);
 
       if(isDone && !OBSTACLE_IS_SEEN)
