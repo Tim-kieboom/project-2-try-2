@@ -31,5 +31,6 @@
 void motorInnit();
 void moveCar(uint8_t mode);
 void testMotor();
+void motorPWM(int cyle_us);
 
 #endif

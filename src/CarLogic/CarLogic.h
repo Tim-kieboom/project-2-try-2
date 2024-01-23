@@ -10,6 +10,21 @@
 #include "IR_sensor/IR_Sensor.h"
 #include "ultrasoon/ultrasoon.h"
 
-void carLogic(CarData* data);
+enum CarState
+{
+  driveForward,
+  lineAtBack,
+  lineAtLeft,
+  lineAtRight,
+  lineAtFrontFirst,
+  lineAtFrontSecond,
+  lineAtBothSides,
+  detectedObstacle,
+  end
+};
+
+void carLogic_init();
+void printState(int carState);
+void carLogic(CarData* data,int &carState);
 
 #endif

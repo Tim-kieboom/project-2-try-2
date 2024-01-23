@@ -53,6 +53,22 @@ void moveMotor(bool motor, uint8_t mode)
     }
 }
 
+void motorPWM(int cyle_us)
+{
+    static Timer* timer = new Timer(SET_TIMER_IN_US);
+
+    if(timer->waitTime(cyle_us))
+    {
+        digitalWrite(ENA, HIGH);
+        digitalWrite(ENB, HIGH);
+    }
+    else
+    {
+        digitalWrite(ENA, LOW);
+        digitalWrite(ENB, LOW);
+    }
+}
+
 void moveCar(uint8_t mode)
 {
     /*
@@ -99,33 +115,29 @@ void moveCar(uint8_t mode)
             return;
 
     }
-
-    digitalWrite(ENA, HIGH);
-    digitalWrite(ENB, HIGH);
-
 }
 
 void testMotor()
 {
-    // moveCar(FORWARD);
-    // delay(2000);
-    // moveCar(STOP_MOVING);
-    // delay(2000);
+    moveCar(FORWARD);
+    delay(2000);
+    moveCar(STOP_MOVING);
+    delay(2000);
 
-    // moveCar(BACKWARD);
-    // delay(2000);
-    // moveCar(STOP_MOVING);
-    // delay(2000);
+    moveCar(BACKWARD);
+    delay(2000);
+    moveCar(STOP_MOVING);
+    delay(2000);
 
     moveCar(LEFT);
     delay(2000);
-    // moveCar(STOP_MOVING);
-    // delay(2000);
+    moveCar(STOP_MOVING);
+    delay(2000);
 
     moveCar(RIGHT);
     delay(2000);
-    // moveCar(STOP_MOVING);
-    // delay(2000);
+    moveCar(STOP_MOVING);
+    delay(2000);
 }
 
 

@@ -21,8 +21,8 @@ enum ultrasoonMode
   reset           = 3
 };
 
-void ultrasoonStartup();
 int readUltrasoon_cm();
+void ultrasoonStartup();
 bool ultrasoonDetectAtDistance_cm(int distance_cm);
 
 #endif

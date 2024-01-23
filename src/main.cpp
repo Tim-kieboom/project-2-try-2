@@ -11,10 +11,10 @@ void init(WifiEsp* wifi)
 
   wifi->wifi_Innit();
 
-  pinMode(REED_PIN, OUTPUT);
   ultrasoonStartup();
-  IR_Innit();
+  carLogic_init();
   motorInnit();
+  IR_Innit();
 }
 
 bool sendData(CarData* carData, WifiEsp* wifi)
@@ -36,14 +36,19 @@ void setup()
 {
   CarData* carData = new CarData();
   WifiEsp* wifi = new WifiEsp();
+  int carState = driveForward;
   init(/*out*/wifi);
 
   bool start = false;
 
-  while(1){testMotor();}
+  //while(1){testMotor();}
 
   while(1)
   {
+    printState(carState);
+
+    if(carState == end)
+      break;
 
     int wifiState = sendData(carData, wifi);
     
@@ -53,14 +58,17 @@ void setup()
     if(wifiState == STOP) 
       break;
 
-    if(!start)
-      continue;
+    // if(!start)
+    //   continue;
 
-    carLogic(/*out*/carData);
+    carLogic(/*out*/carData, /*out*/carState);
   }
+
+  Serial.println("ending program");
 
   delete carData;
   delete wifi;
 }
+
 
 void loop(){}

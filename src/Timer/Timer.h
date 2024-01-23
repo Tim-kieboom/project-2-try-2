@@ -16,8 +16,8 @@ private:
 public:
     Timer(bool isMillis);       //also calls startTimer
 
-    void resetBeginTime();      //set timeBegin to the current time
     void startTimer();          //set timeBegin AND timeNow to the current time
+    void resetBeginTime();      //set timeBegin to the current time
     
     bool waitTime(int time); 
 
