@@ -22,9 +22,6 @@ void init()
   Serial.begin(115200);
   Serial.println("starting");
 
-<<<<<<< Updated upstream
-  wifi->wifi_Innit();
-=======
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
@@ -38,7 +35,6 @@ void init()
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   server.begin();
->>>>>>> Stashed changes
 
   ultrasoonStartup();
   carLogic_init();
