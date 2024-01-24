@@ -120,7 +120,24 @@ bool printHTML(int ultrasoonSensor, bool REED, int* irArray, WiFiClient &client)
     client.println("<p><a href=\"/12/on\"><button class=\"button button2\">OFF</button></a></p>");
   }
 
+  String message = "";
+  uint8_t i = 0;
+  while(irArray[i] != -69)
+  {
+    message += "Infrarood Sensor " + String(i+1) + ": ";
+    message += irArray[i];
+    message += "<br>";
+  
+    i++;
+  }
 
+  client.println(message);
+
+  client.print("Ultrasonische Afstands Sensor: ");
+  client.print(ultrasoonSensor + "CM");
+
+  client.print("REED Sensor: ");
+  client.println((REED) ? "true" : "false");
 
   client.println("</body></html>");
   // The HTTP response ends with another blank line
