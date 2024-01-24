@@ -16,6 +16,10 @@ class WifiEsp
 private:
     const char *ssid = "bomba";
     const char *password = "bombaBomba";
+    WiFiClient client;
+    String header;
+
+    String outputState = "off";
 
 public:
     //need to call serial.begin(buadrate); to make this methode work
@@ -23,10 +27,13 @@ public:
 
     int loopWifi();
     int loopWifi(int ultrasoonSensor, bool REED, int* irArray);
+    
+    bool isConnected();
+    void disconnect();
 
 private:
     String printIR_Data(int* irArray);
-    void printBaseHtml(WiFiClient &client);
+    void printBaseHtml();
 
 };
 
