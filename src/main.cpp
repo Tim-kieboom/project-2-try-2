@@ -58,6 +58,7 @@ bool printHTML(WiFiClient &client){
   // Display the HTML web page
   client.println("<!DOCTYPE html><html>");
   client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+  client.println("<meta http-equiv=\"refresh\" content=\"0.5\">");
   client.println("<link rel=\"icon\" href=\"data:,\">");
   // CSS to style the on/off buttons
   // Feel free to change the background-color and font-size attributes to fit your preferences
@@ -98,6 +99,7 @@ bool printHTML(int ultrasoonSensor, bool REED, int* irArray, WiFiClient &client)
   // Display the HTML web page
   client.println("<!DOCTYPE html><html>");
   client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+  client.println("<meta http-equiv=\"refresh\" content=\"0.5\">");
   client.println("<link rel=\"icon\" href=\"data:,\">");
   // CSS to style the on/off buttons
   // Feel free to change the background-color and font-size attributes to fit your preferences
@@ -158,9 +160,6 @@ void setup()
 
 
 void loop(){
-  if(carState == end)
-    return;
-
   WiFiClient client = server.available();   // Listen for incoming clients
   if (client) {                             // If a new client connects,
     Serial.println("New Client.");          // print a message out in the serial port
