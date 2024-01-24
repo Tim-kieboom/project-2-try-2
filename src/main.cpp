@@ -193,5 +193,7 @@ void loop(){
   if (outputState == "on"){
     printState(carState);
     carLogic(/*out*/carData, /*out*/carState);
-  }
+  } else{
+    moveCar(STOP_MOVING);
+   }
 }
