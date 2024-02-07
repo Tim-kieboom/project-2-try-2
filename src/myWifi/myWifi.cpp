@@ -20,10 +20,7 @@ void setSensorData_In_Json(String carState, int ultrasoon, int* IRs, int REED)
   String IRoff = "not detected"; 
   String IRon  = "detected";
 
-  // if(carState =! NULL)
-  //   sensorJson["carState"]  = "driveForward";
-  // else
-    sensorJson["carState"]  = carState;
+  sensorJson["carState"]  = carState;
 
   sensorJson["ultrasoon"] = String(ultrasoon);
   sensorJson["REED"]      = String(REED);
