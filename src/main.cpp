@@ -41,14 +41,11 @@ void setup()
 
   while(1)
   {
-    printState(carState);
-
     if(carState == end)
       break;
 
     //wifiState={idle, start, stop}
     bool wifiStart = getWifiState(); 
-    Serial.println(wifiStart);
 
     if(!wifiStart)
       continue;
