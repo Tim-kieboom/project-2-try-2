@@ -8,52 +8,78 @@ void carLogic_init()
   pinMode(REED_PIN, INPUT);
 }
 
-void printState(int carState)
+String getStringState(int carState)
 {
   switch (carState) 
   {
   case driveForward:
-    Serial.println("driveForward");
+    return "driveForward";
     break;
 
   case lineAtBack:
-    Serial.println("lineAtBack");
+    return "lineAtBack";
     break;
   
   case lineAtLeft:
-    Serial.println("lineAtLeft");
+    return "lineAtLeft";
     break;
 
   case lineAtRight:
-    Serial.println("lineAtRight");
+    return "lineAtRight";
     break;
 
   case lineAtFrontFirst:
-    Serial.println("lineAtFrontFirst");
+    return "lineAtFrontFirst";
     break;
 
   case lineAtFrontSecond:
-    Serial.println("lineAtFrontSecond");
+    return "lineAtFrontSecond";
     break;
 
   case lineAtBothSides:
-    Serial.println("lineAtBothSides");
+    return "lineAtBothSides";
     break;
 
   case detectedObstacle:
-    Serial.println("detectedObstacle");
+    return "detectedObstacle";
     break;
 
   case end:
-    Serial.println("end");
+    return "end";
     break;
   
   default:
     break;
   }
+  return "no state";
 }
 
-bool moveAndWait_ms(int mode , uint32_t time_ms)
+void printState(int carState)
+{
+  Serial.println(getStringState(carState));
+}
+
+// bool moveAndWait_ms(uint8_t* moveArray, uint32_t* timeArray_ms)
+// {
+//   static int step = 0;
+//   static uint8_t move = moveArray[0];
+
+//   //if end of moveArray is reached reset funtion
+//   if(step > sizeof(moveArray))
+//   {  
+//     step = 0;
+//     return true;
+//   }
+
+//   move = moveArray[step];
+
+//   if(moveAndWait_ms(move, timeArray_ms[step]/*ms*/))
+//     step++;
+
+//   return false;
+// }
+
+bool moveAndWait_ms(uint8_t mode , uint32_t time_ms)
 {
   static Timer* timer = new Timer(SET_TIMER_IN_MS);
 
@@ -175,7 +201,7 @@ void carDoesState(int &carState)
       moveTime[1/*left*/]     = 1200/*ms*/;
 
       if(moveBackAnd(RIGHT, moveTime/*ms*/))
-        carState = driveForward;
+      carState = driveForward;
       break;
 
     case lineAtLeft: //go right

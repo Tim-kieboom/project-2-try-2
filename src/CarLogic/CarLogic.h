@@ -25,6 +25,7 @@ enum CarState
 
 void carLogic_init();
 void printState(int carState);
+String getStringState(int carState);
 void carLogic(CarData* data,int &carState);
 
 #endif

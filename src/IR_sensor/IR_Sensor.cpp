@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "IR_Sensor.h"
 
 #define RECIEVER_PIN_IR0            36  
 #define RECIEVER_PIN_IR1            39   

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _DEBUG_H_
-#define _DEBUG_H_
+#ifndef _MYDEBUG_H_
+#define _MYDEBUG_H_
 
 #include "./Timer/Timer.h"
 #include "./IR_sensor/IR_Sensor.h"

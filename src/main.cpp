@@ -1,15 +1,16 @@
 #include <Arduino.h>
 #include "CarData.h"
 #include "Timer/Timer.h"
-#include "wifi/wifiEsp.h"
+#include "myWifi/myWifi.h"
 #include "CarLogic/CarLogic.h"
 
-void init(WifiEsp* wifi)
+void init()
 {
   Serial.begin(115200);
   Serial.println("starting");
 
-  wifi->wifi_Innit();
+  //for myWifi to be used you have to upload the html file in the data folder look in the file for more information
+  startWifi();
 
   ultrasoonStartup();
   carLogic_init();
@@ -17,55 +18,49 @@ void init(WifiEsp* wifi)
   IR_Innit();
 }
 
-bool sendData(CarData* carData, WifiEsp* wifi)
+void sendData(CarData* carData, int carState)
 {
-  int* irArray = carData->irArray;
-
-  if(irArray[0] == SENTINEL_VALUE) //if irArray is empty(so start hasn't been pressed yet)
-    return wifi->loopWifi();
-
-  return wifi->loopWifi
+  setSensorData_In_Json
   (
-    carData->ulstrasoonData,
-    carData->REED,
-    irArray
+    getStringState(carState), 
+    carData->ulstrasoonData, 
+    carData->irArray, 
+    carData->REED
   );
 }
 
 void setup() 
 {
+  Timer* dataSendTimer = new Timer(SET_TIMER_IN_MS);
   CarData* carData = new CarData();
-  WifiEsp* wifi = new WifiEsp();
   int carState = driveForward;
-  init(/*out*/wifi);
 
-  bool start = false;
+  init();
+
+  sendData(carData, carState);
 
   while(1)
   {
     printState(carState);
 
-    if(carState == end)
-      break;
+    // if(carState == end)
+    //   break;
 
-    int wifiState = sendData(carData, wifi);
-    
-    if(wifiState == START)
-      start = true;
+    bool wifiStart = getWifiState(); //wifiState={idle, start, stop}
+    Serial.println(wifiStart);
 
-    if(wifiState == STOP) 
-      break;
-
-    // if(!start)
-    //   continue;
+    if(!wifiStart)
+      continue;
 
     carLogic(/*out*/carData, /*out*/carState);
+
+    sendData(carData, carState);
   }
 
   Serial.println("ending program");
 
   delete carData;
-  delete wifi;
+  delete dataSendTimer;
 }
 
 

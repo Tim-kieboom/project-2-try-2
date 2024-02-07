@@ -2,6 +2,8 @@
 #ifndef _MOTOR_H_
 #define _MOTRO_H_
 
+#include "./Timer/Timer.h"
+
 #define FORWARD         0
 #define BACKWARD        3
 #define LEFT            1

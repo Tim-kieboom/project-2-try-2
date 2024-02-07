@@ -1,0 +1,76 @@
+<!-- 
+    to upload html to esp32 in platformIO:
+      -put your html/js/css files in a folder named data in the project folder
+      -go to platformio extenstion tab in vscode(the alien icon left of screan)
+      -go to featheresp32->platform
+      -press build Filesystem image
+      -press upload Filesystem image 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="data:,">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <h1>Bomba mobiel</h1>
+        <p><button class="button" id="button" onclick="switchButton()">off</button></p>
+        <div id="carState">carState: not started yet</div>
+        <div id="ultrasoon">ultrasoon: </div>
+        <div id="REED">REED: </div>
+        <div id="IR1">IR1: </div>
+        <div id="IR2">IR2: </div>
+        <div id="IR3">IR3: </div>
+        <div id="IR4">IR4: </div>
+
+        <script>
+            var state = false;
+
+            const getJsonHeader =
+            {
+                methode: "GET",
+                headers: 
+                {
+                    "Content-Type": "application/json"
+                }
+            }
+
+            async function switchButton()
+            {
+                const response = await fetch
+                (
+                    "/button",
+                    getJsonHeader
+                )
+                .catch(error => console.error(error));
+                state = !state;
+
+                document.getElementById("button").textContent = (state) ? "on" : "off";
+            }
+
+            async function update() 
+            {
+                const response = await fetch
+                (
+                    "/update",
+                    getJsonHeader
+                )
+                .catch(error => console.error(error));
+
+                const json = await response.json();
+
+                document.getElementById('carState').textContent     = "carState: "  + json.carState;
+                document.getElementById('ultrasoon').textContent    = "ultrasoon: " + json.ultrasoon + "cm";
+                document.getElementById('REED').textContent         = "REED: "      + json.REED;
+                document.getElementById('IR1').textContent          = "IR1: "       + json.IR1;
+                document.getElementById('IR2').textContent          = "IR2: "       + json.IR2;
+                document.getElementById('IR3').textContent          = "IR3: "       + json.IR3;
+                document.getElementById('IR4').textContent          = "IR4: "       + json.IR4;
+            }
+
+            setInterval(async () => {await update()}, 500/*ms*/);
+        </script>
+    </body>
+</html>
