@@ -44,7 +44,6 @@ void setup()
     if(carState == end)
       break;
 
-    //wifiState={idle, start, stop}
     bool wifiStart = getWifiState(); 
 
     if(!wifiStart)
