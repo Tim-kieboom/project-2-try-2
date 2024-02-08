@@ -14,8 +14,8 @@ int readUltrasoon_cm()
 {
   static Timer* timer_us = new Timer(SET_TIMER_IN_US);
 
-  static int step = 0;
-  static int mode = begin;
+  static uint8_t step = 0;
+  static uint8_t mode = begin;
 
   if( timer_us->waitTime(1) )
     step++;
@@ -62,8 +62,8 @@ int readUltrasoon_cm()
 
 bool ultrasoonDetectAtDistance_cm(int distance_cm)
 {
-  static int timer = 0;
-  static int safetyBuffer = 0;
+  static uint8_t timer = 0;
+  static uint8_t safetyBuffer = 0;
   int newDistance = readUltrasoon_cm();
 
   if(newDistance == READING_NOT_FOUND)

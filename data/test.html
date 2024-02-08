@@ -45,8 +45,8 @@
                     getJsonHeader
                 )
                 .catch(error => console.error(error));
+                
                 state = !state;
-
                 document.getElementById("button").textContent = (state) ? "on" : "off";
             }
 

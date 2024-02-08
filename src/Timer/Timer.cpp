@@ -17,7 +17,7 @@ void Timer::updateTimer()
     timeNow = getCurrentTime();
 }
 
-bool Timer::waitTime(int time)
+bool Timer::waitTime(uint32_t time)
 {
     updateTimer();
     

@@ -35,4 +35,9 @@ void moveCar(uint8_t mode);
 void testMotor();
 void motorPWM(int cyle_us);
 
+//move    = what direction to move in (BACKWARD, LEFT etc..)
+//time_ms = how long the move should take
+bool moveAndWait_ms(uint8_t move , uint32_t time_ms);
+bool moveAndWait_ms(uint8_t* moveArray, uint32_t* timeArray_ms);
+
 #endif

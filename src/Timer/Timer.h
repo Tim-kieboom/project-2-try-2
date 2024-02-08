@@ -19,7 +19,7 @@ public:
     void startTimer();          //set timeBegin AND timeNow to the current time
     void resetBeginTime();      //set timeBegin to the current time
     
-    bool waitTime(int time); 
+    bool waitTime(uint32_t time); 
 
 private:
     uint64_t getCurrentTime();
