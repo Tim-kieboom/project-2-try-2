@@ -69,7 +69,6 @@ bool ultrasoonDetectAtDistance_cm(int distance_cm)
   if(newDistance == READING_NOT_FOUND)
     return false;
 
-
   if(newDistance != 0)
     readDistance = newDistance;
   

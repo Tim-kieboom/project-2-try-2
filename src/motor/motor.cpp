@@ -73,7 +73,7 @@ void moveCar(uint8_t mode)
 {
     /*
         only if ENA == HIGH: motor_a(A) can move 
-
+        
         only if ENB == HIGH: motor_b(B) can move 
 
 
@@ -147,6 +147,7 @@ bool moveAndWait_ms(uint8_t move, uint32_t time_ms)
     moveCar(move);
 
     bool isTimeOver = timer->waitTime(time_ms);
+    delete timer;
     return isTimeOver;
 }
 
@@ -165,38 +166,6 @@ bool moveAndWait_ms(uint8_t* moveArray, uint32_t* timeArray_ms)
 
     if(moveAndWait_ms(move, timeArray_ms[step]))
         step++;
-
-    return false;
-}
-
-void makeAndfillArrayWith(uint32_t* array, uint32_t value, uint8_t* getSizeFromArray)
-{
-    uint8_t size = 0;
-
-    while(getSizeFromArray[size] != '\0'/*null-asci-value (end of array)*/)
-        size++;
-
-    array = new uint32_t[size];
-
-    for(int i = 0; i < size; i++)
-        array[i] = value;
-}
-
-
-bool moveAndWait_ms(uint8_t* moveArray, u_int32_t allTimeSame_ms)
-{
-    static uint32_t* timeArray_ms = nullptr;
-
-    if(timeArray_ms == nullptr)
-        makeAndfillArrayWith(/*out*/timeArray_ms, allTimeSame_ms, moveArray); 
-
-    if(moveAndWait_ms(moveArray, timeArray_ms))
-    {
-        delete[] timeArray_ms;
-        timeArray_ms = nullptr;
-
-        return true;
-    }
 
     return false;
 }

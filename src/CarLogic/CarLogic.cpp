@@ -119,10 +119,8 @@ void carDoesState(int &carState)
   digitalWrite(ENA, HIGH);
   digitalWrite(ENB, HIGH);
 
-  if (moveArray != nullptr)
-    delete[] moveArray;
-  if (moveTime_ms != nullptr)
-    delete[] moveTime_ms;
+  delete moveArray;
+  delete moveTime_ms;
 }
 
 void checkIR_Sensors(int* IRs, int &carState)

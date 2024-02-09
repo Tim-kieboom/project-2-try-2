@@ -1,3 +1,4 @@
+#pragma once
 #ifndef __MYWIFI_H__
 #define __MYWIFI_H__
 
