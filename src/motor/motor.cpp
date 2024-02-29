@@ -1,11 +1,12 @@
 #include <Arduino.h>
 #include "motor.h"
 
+#define IS_END_OF_ARRAY(array, index) array[index] == '\0' /*null-asci-value (end of array also value 0)*/
+
 static const int frequency = 500;
 static const int resolution = 8;
 static const uint8_t channel_A = 0;
 static const uint8_t channel_B = 1;
-
 
 void motorInnit()
 {
@@ -146,25 +147,37 @@ bool moveAndWait_ms(uint8_t move, uint32_t time_ms)
 
     moveCar(move);
 
-    bool isTimeOver = timer->waitTime(time_ms);
-    delete timer;
-    return isTimeOver;
+    if(timer->waitTime(time_ms))
+    {
+        delete timer;
+        return true;
+    }
+    return false;
 }
 
 bool moveAndWait_ms(uint8_t* moveArray, uint32_t* timeArray_ms)
 {
     static int step = 0;
     uint8_t move = BACKWARD;
+    uint32_t time_ms;
 
-    if(moveArray[step] == '\0'/*null-asci-value (end of array)*/)
+    if(IS_END_OF_ARRAY(timeArray_ms, step-1))
+    {    
+        const char* message = "Exception Invalid timeArray_ms lenth ( timeArray_ms.size() has to be >= moveArray.size() )";
+        Serial.println(message);
+        throw std::invalid_argument(message);
+    }
+
+    if(IS_END_OF_ARRAY(moveArray, step))
     {  
         step = 0;
         return true;
     }
 
     move = moveArray[step];
+    time_ms = timeArray_ms[step];
 
-    if(moveAndWait_ms(move, timeArray_ms[step]))
+    if(moveAndWait_ms(move, time_ms))
         step++;
 
     return false;

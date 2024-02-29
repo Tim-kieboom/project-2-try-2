@@ -15,8 +15,19 @@ struct CarData
     irArray[0] = SENTINEL_VALUE; 
   }
 
+  ~CarData()
+  {
+    if(irArray != nullptr)
+      delete irArray;
+  }
+
+  //ir = infraRed sensor used to follow the line of the maze
   int* irArray;
+  
+  //megnatic sensor used to sens the end of the maze
   bool REED = false;
+
+  //can sens object so the car can avoid them
   int ulstrasoonData = 0;
 };
 

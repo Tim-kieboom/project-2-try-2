@@ -128,21 +128,26 @@ void checkIR_Sensors(int* IRs, int &carState)
   static Timer* timer = new Timer(SET_TIMER_IN_MS);
   static bool isSecondFront = false;
 
-  if(IRs[BACKWARD]     > 0)
+  bool isForward   = IRs[0] > 0;
+  bool isBackward  = IRs[1] > 0;
+  bool isLeft      = IRs[2] > 0;
+  bool isRight     = IRs[3] > 0;
+
+  if(isBackward)
     carState = lineAtBack;
 
-  else if(IRs[LEFT] > 0 && IRs[RIGHT] > 0)
+  else if(isLeft && isRight)
     carState = lineAtBothSides;
 
-  else if(IRs[RIGHT]   > 0)
+  else if(isRight)
     carState = lineAtRight;
 
-  else if(IRs[LEFT]    > 0)
+  else if(isLeft)
     carState = lineAtLeft;
 
-  else if(IRs[FORWARD] > 0)
+  else if(isForward)
   { 
-    if(carState == lineAtFrontFirst && timer->waitTime(500))  
+    if(carState == lineAtFrontFirst && timer->waitTime(500/*ms*/))  
       isSecondFront = true;
 
     if(isSecondFront)  

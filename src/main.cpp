@@ -31,7 +31,6 @@ void sendData(CarData* carData, int carState)
 
 void setup() 
 {
-  Timer* dataSendTimer = new Timer(SET_TIMER_IN_MS);
   CarData* carData = new CarData();
   int carState = driveForward;
 
@@ -57,7 +56,6 @@ void setup()
   Serial.println("ending program");
 
   delete carData;
-  delete dataSendTimer;
 }
 
 

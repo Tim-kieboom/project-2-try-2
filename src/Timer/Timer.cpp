@@ -12,11 +12,6 @@ void Timer::startTimer()
     timeNow   = getCurrentTime();
 }
 
-void Timer::updateTimer()
-{
-    timeNow = getCurrentTime();
-}
-
 bool Timer::waitTime(uint32_t time)
 {
     updateTimer();
@@ -29,6 +24,12 @@ bool Timer::waitTime(uint32_t time)
 
     return false;
 }
+
+void Timer::updateTimer()
+{
+    timeNow = getCurrentTime();
+}
+
 
 void Timer::resetBeginTime()
 {

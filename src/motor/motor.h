@@ -4,12 +4,12 @@
 
 #include "./Timer/Timer.h"
 
-#define FORWARD         0
-#define BACKWARD        3
-#define LEFT            1
-#define RIGHT           2
-#define STOP_MOVING     4
-#define WALL_DETECTED   5
+#define FORWARD         1
+#define BACKWARD        2
+#define LEFT            3
+#define RIGHT           4
+#define STOP_MOVING     5
+#define WALL_DETECTED   6
 
 
 #define MOTOR_OFF                   0
@@ -35,8 +35,13 @@ void moveCar(uint8_t mode);
 void testMotor();
 void motorPWM(int cyle_us);
 
-//move    = what direction to move in (BACKWARD, LEFT etc..)
-//time_ms = how long the move should take
+/*
+moveAndWait_ms(uint8_t move , uint32_t time_ms) = moves in direction 'move' for 'time_ms' (returns true if end of move
+    -move    = what direction to move in (BACKWARD, LEFT etc..)
+    -time_ms = how long the move should take in milliseconds
+
+moveAndWait_ms(uint8_t* moveArray, uint32_t* timeArray_ms) = a sequence of moves with each there time_ms (timeArray_ms.size() must be >= moveArray.size())
+*/
 bool moveAndWait_ms(uint8_t move , uint32_t time_ms);
 bool moveAndWait_ms(uint8_t* moveArray, uint32_t* timeArray_ms);
 

@@ -20,10 +20,10 @@
         <div id="carState">carState: not started yet</div>
         <div id="ultrasoon">ultrasoon: </div>
         <div id="REED">REED: </div>
-        <div id="IR1">IR1: </div>
-        <div id="IR2">IR2: </div>
-        <div id="IR3">IR3: </div>
-        <div id="IR4">IR4: </div>
+        <div id="IR1">FORWARD: </div>
+        <div id="IR2">BACKWARD: </div>
+        <div id="IR3">LEFT: </div>
+        <div id="IR4">RIGHT: </div>
 
         <script>
             var state = false;
@@ -64,10 +64,10 @@
                 document.getElementById('carState').textContent     = "carState: "  + json.carState;
                 document.getElementById('ultrasoon').textContent    = "ultrasoon: " + json.ultrasoon + "cm";
                 document.getElementById('REED').textContent         = "REED: "      + json.REED;
-                document.getElementById('IR1').textContent          = "IR1: "       + json.IR1;
-                document.getElementById('IR2').textContent          = "IR2: "       + json.IR2;
-                document.getElementById('IR3').textContent          = "IR3: "       + json.IR3;
-                document.getElementById('IR4').textContent          = "IR4: "       + json.IR4;
+                document.getElementById('IR1').textContent          = "FORWARD: "   + json.IR1;
+                document.getElementById('IR2').textContent          = "BACKWARD: "  + json.IR2;
+                document.getElementById('IR3').textContent          = "LEFT: d"     + json.IR3;
+                document.getElementById('IR4').textContent          = "RIGHT: "     + json.IR4;
             }
 
             setInterval(async () => {await update()}, 500/*ms*/);

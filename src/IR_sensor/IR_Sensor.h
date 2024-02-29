@@ -2,12 +2,12 @@
 #ifndef _IR_SENSOR_H_
 #define _IR_SENSOR_H_
 
-#define FORWARD         0
-#define BACKWARD        3
-#define LEFT            1
-#define RIGHT           2
-#define STOP_MOVING     4
-#define WALL_DETECTED   5
+#define FORWARD         1
+#define BACKWARD        2
+#define LEFT            3
+#define RIGHT           4
+#define STOP_MOVING     5
+#define WALL_DETECTED   6
 
 #define SENTINEL_VALUE -1
 

@@ -8,6 +8,7 @@ static AsyncWebServer server(80);
 static JsonDocument sensorJson;
 static IPAddress IP;
 
+//if client on webbrowser presses the on button state = true;
 static bool state = false;
 
 bool getWifiState()
@@ -17,8 +18,9 @@ bool getWifiState()
 
 void setSensorData_In_Json(String carState, int ultrasoon, int* IRs, int REED)
 {
-  String IRoff = "not detected"; 
-  String IRon  = "detected";
+  const String IR_Low = "not detected"; 
+  const String IR_High = "detected";
+  const String IRnotSet = "unknown";
 
   sensorJson["carState"]  = carState;
 
@@ -28,17 +30,17 @@ void setSensorData_In_Json(String carState, int ultrasoon, int* IRs, int REED)
   //if IRs empty
   if(IRs[0] == SENTINEL_VALUE) 
   {
-    sensorJson["IR1"] = IRoff;
-    sensorJson["IR2"] = IRoff;
-    sensorJson["IR3"] = IRoff;
-    sensorJson["IR4"] = IRoff;
+    sensorJson["IR1"] = IRnotSet;
+    sensorJson["IR2"] = IRnotSet;
+    sensorJson["IR3"] = IRnotSet;
+    sensorJson["IR4"] = IRnotSet;
     return;
   }
 
-  sensorJson["IR1"] = (IRs[0] == 1) ? IRon : IRoff;
-  sensorJson["IR2"] = (IRs[1] == 1) ? IRon : IRoff;
-  sensorJson["IR3"] = (IRs[2] == 1) ? IRon : IRoff;
-  sensorJson["IR4"] = (IRs[3] == 1) ? IRon : IRoff;
+  sensorJson["IR1"] = (IRs[0] == 1) ? IR_High : IR_Low;
+  sensorJson["IR2"] = (IRs[1] == 1) ? IR_High : IR_Low;
+  sensorJson["IR3"] = (IRs[2] == 1) ? IR_High : IR_Low;
+  sensorJson["IR4"] = (IRs[3] == 1) ? IR_High : IR_Low;
 }
 
 String getJson()
@@ -101,6 +103,6 @@ void wifiInit()
 
 void startWifi()
 {
-    wifiInit();
-    serverController();
+  wifiInit();
+  serverController();
 }
