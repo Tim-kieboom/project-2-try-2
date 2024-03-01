@@ -80,7 +80,7 @@ void carDoesState(int &carState)
 
     case lineAtRight: //go back and left
       moveArray    = new uint8_t[2] {BACKWARD, LEFT}; 
-      moveTime_ms  = new uint32_t[2]{300,      1200}; 
+      moveTime_ms  = new uint32_t[2]{300,      1200};
       break;
 
     case lineAtLeft: //go back and right
@@ -105,7 +105,7 @@ void carDoesState(int &carState)
 
     case detectedObstacle: //avoid obstikal
       moveArray    = new uint8_t[2] {BACKWARD, RIGHT};
-      moveTime_ms  = new uint32_t[2]{600,      1600};
+      moveTime_ms  = new uint32_t[2]{600,      1600}; 
       break;
 
     case end: //stop moveing
@@ -113,14 +113,17 @@ void carDoesState(int &carState)
       return;
   }
 
-  if(moveAndWait_ms(moveArray, moveTime_ms))
+  if(moveAndWait_ms(moveArray, moveTime_ms, sizeof(moveArray)))
     carState = driveForward;
 
   digitalWrite(ENA, HIGH);
   digitalWrite(ENB, HIGH);
 
-  delete moveArray;
-  delete moveTime_ms;
+  if(moveArray != nullptr)
+    delete moveArray;
+
+  if(moveTime_ms != nullptr)
+    delete moveTime_ms;
 }
 
 void checkIR_Sensors(int* IRs, int &carState)
@@ -148,7 +151,9 @@ void checkIR_Sensors(int* IRs, int &carState)
   else if(isForward)
   { 
     if(carState == lineAtFrontFirst && timer->waitTime(500/*ms*/))  
+    {
       isSecondFront = true;
+    }
 
     if(isSecondFront)  
     {  

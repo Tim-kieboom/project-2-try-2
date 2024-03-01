@@ -3,6 +3,7 @@
 #include "Timer/Timer.h"
 #include "myWifi/myWifi.h"
 #include "CarLogic/CarLogic.h"
+#include "ultrasoon/ultrasoon.h"
 
 void init()
 {
@@ -23,7 +24,7 @@ void sendData(CarData* carData, int carState)
   setSensorData_In_Json
   (
     getStringState(carState), 
-    carData->ulstrasoonData, 
+    1, 
     carData->irArray, 
     carData->REED
   );

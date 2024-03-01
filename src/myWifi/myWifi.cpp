@@ -5,7 +5,7 @@ static const char* password = "bombaBomba";
 static const char* ssid = "bomba"; 
 
 static AsyncWebServer server(80);
-static JsonDocument sensorJson;
+static JsonDocument sensorJson = JsonDocument();
 static IPAddress IP;
 
 //if client on webbrowser presses the on button state = true;
@@ -18,6 +18,7 @@ bool getWifiState()
 
 void setSensorData_In_Json(String carState, int ultrasoon, int* IRs, int REED)
 {
+
   const String IR_Low = "not detected"; 
   const String IR_High = "detected";
   const String IRnotSet = "unknown";

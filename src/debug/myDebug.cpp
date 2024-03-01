@@ -1,11 +1,11 @@
 #include "myDebug.h"
 
-void printUltrasoon(bool print)
+void printUltrasoon()
 {
   int distance = readUltrasoon_cm();
 
-  if(distance == READING_NOT_FOUND)
-    return;
+  // if(distance == READING_NOT_FOUND)
+  //   return;
 
     Serial.print("ultrasoon: ");
     Serial.print(distance);
@@ -45,5 +45,6 @@ void debugSensors(int time_ms)
     Serial.println();
   }
 
-    printUltrasoon(print);
+  if(print)
+  printUltrasoon();
 }

@@ -43,6 +43,6 @@ moveAndWait_ms(uint8_t move , uint32_t time_ms) = moves in direction 'move' for 
 moveAndWait_ms(uint8_t* moveArray, uint32_t* timeArray_ms) = a sequence of moves with each there time_ms (timeArray_ms.size() must be >= moveArray.size())
 */
 bool moveAndWait_ms(uint8_t move , uint32_t time_ms);
-bool moveAndWait_ms(uint8_t* moveArray, uint32_t* timeArray_ms);
+bool moveAndWait_ms(uint8_t* moveArray, uint32_t* timeArray_ms, uint8_t size);
 
 #endif
