@@ -24,7 +24,7 @@ void sendData(CarData* carData, int carState)
   setSensorData_In_Json
   (
     getStringState(carState), 
-    1, 
+    carData->ulstrasoonData, 
     carData->irArray, 
     carData->REED
   );
