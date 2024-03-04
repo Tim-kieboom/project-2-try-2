@@ -20,10 +20,10 @@
         <div id="carState">carState: not started yet</div>
         <div id="ultrasoon">ultrasoon: </div>
         <div id="REED">REED: </div>
-        <div id="IR1">FORWARD: </div>
-        <div id="IR2">BACKWARD: </div>
-        <div id="IR3">LEFT: </div>
-        <div id="IR4">RIGHT: </div>
+        <div id="IR1">FORWARD_IR: </div>
+        <div id="IR2">BACKWARD_IR: </div>
+        <div id="IR3">LEFT_IR: </div>
+        <div id="IR4">RIGHT_IR: </div>
 
         <script>
             var state = false;
@@ -61,13 +61,13 @@
 
                 const json = await response.json();
 
-                document.getElementById('carState').textContent     = "carState: "  + json.carState;
-                document.getElementById('ultrasoon').textContent    = "ultrasoon: " + json.ultrasoon + "cm";
-                document.getElementById('REED').textContent         = "REED: "      + json.REED;
-                document.getElementById('IR1').textContent          = "FORWARD: "   + json.IR1;
-                document.getElementById('IR2').textContent          = "BACKWARD: "  + json.IR2;
-                document.getElementById('IR3').textContent          = "LEFT: "     + json.IR3;
-                document.getElementById('IR4').textContent          = "RIGHT: "     + json.IR4;
+                document.getElementById('carState').textContent     = "carState: "    + json.carState;
+                document.getElementById('ultrasoon').textContent    = "ultrasoon: "   + json.ultrasoon + "cm";
+                document.getElementById('REED').textContent         = "REED: "        + json.REED;
+                document.getElementById('IR1').textContent          = "FORWARD_IR: "  + json.IR1;
+                document.getElementById('IR2').textContent          = "BACKWARD_IR: " + json.IR2;
+                document.getElementById('IR3').textContent          = "LEFT_IR: "     + json.IR3;
+                document.getElementById('IR4').textContent          = "RIGHT_IR: "    + json.IR4;
             }
 
             setInterval(async () => {await update()}, 500/*ms*/);

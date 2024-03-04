@@ -21,5 +21,6 @@ bool getWifiState();
 
 //saves the sensor data in a json format so that when the webpage asks for it it sends this json.
 void setSensorData_In_Json(String carState, int ultrasoon, int* IRs, int REED);
+void setSensorData_toEmpty();
 
 #endif

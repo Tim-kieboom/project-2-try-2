@@ -140,31 +140,3 @@ void testMotor()
     moveCar(STOP_MOVING);
     delay(2000);
 }
-
-bool moveAndWait_ms(uint8_t move, uint32_t time_ms)
-{
-    static Timer* timer = new Timer(SET_TIMER_IN_MS);
-
-    moveCar(move);
-
-    return timer->waitTime(time_ms);
-}
-
-bool moveAndWait_ms(uint8_t* moveArray, uint32_t* timeArray_ms, uint8_t size)
-{
-    static int step = 0;
-    uint8_t move = BACKWARD;
-
-    if(step >= size)
-    {  
-        step = 0;
-        return true;
-    }
-
-    move = moveArray[step];
-
-    if(moveAndWait_ms(move, timeArray_ms[step]))
-        step++;
-
-    return false;
-}

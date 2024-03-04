@@ -3,6 +3,7 @@
 
 static const char* password = "bombaBomba";
 static const char* ssid = "bomba"; 
+static int* emptyIR =  new int[1]{SENTINEL_VALUE};
 
 static AsyncWebServer server(80);
 static JsonDocument sensorJson = JsonDocument();
@@ -83,8 +84,21 @@ void serverController()
     });
 }
 
+void setSensorData_toEmpty()
+{
+  setSensorData_In_Json
+  (
+    "carOff",
+    -1,
+    emptyIR,
+    0
+  );
+}
+
 void wifiInit()
 {
+  setSensorData_toEmpty();
+
   if(!SPIFFS.begin(true))
   {
     Serial.println("SPIFFS coundn't start");
