@@ -122,6 +122,33 @@ bool backAndRight(uint32_t* time_ms)
   return false;
 }
 
+bool backAndLeft(uint32_t* time_ms)
+{
+  static int step = 0;
+  static int move = BACKWARD;
+
+  if(moveAndWait_ms(move, time_ms[step]/*ms*/))
+    step++;
+
+  switch(step)
+  {
+    case 0:
+      move = BACKWARD;
+      break;
+
+    case 1:
+      move = LEFT;
+      break;
+
+    case 2: //reset
+      move = BACKWARD;
+      step = 0;
+      return true;
+  }
+
+  return false;
+}
+
 bool backAndRightAnd(int mode, uint32_t* time_ms)
 {
   static int step = 0;
@@ -191,32 +218,33 @@ void carDoesState(int &carState)
   {
     case driveForward: //go forward
       moveCar(FORWARD);
-      motorPWM(80/*us pulse freq*/);
-      return;
+      //motorPWM(500/*ms pulse freq*/);
+      break;
 
     case lineAtBack: //go forward
-      carState = driveForward;
+      moveCar(FORWARD);
+      //motorPWM(500/*ms pulse freq*/);
       break;
 
     case lineAtRight: //go left
-      moveTime[0/*backward*/] = 300 /*ms*/;
-      moveTime[1/*left*/]     = 1200/*ms*/;
+      moveTime[0/*backward*/] = 300/*ms*/;
+      moveTime[1/*left*/]     = 400/*ms*/;
 
       if(moveBackAnd(RIGHT, moveTime/*ms*/))
       carState = driveForward;
       break;
 
     case lineAtLeft: //go right
-      moveTime[0/*backward*/] = 300 /*ms*/;
-      moveTime[1/*right*/]    = 1200/*ms*/;
+      moveTime[0/*backward*/] = 300/*ms*/;
+      moveTime[1/*right*/]    = 400/*ms*/;
 
       if(moveBackAnd(LEFT, moveTime/*ms*/))
         carState = driveForward;
       break;
 
     case lineAtFrontFirst: //go back and then right
-      moveTime[0/*backward*/] = 600 /*ms*/;
-      moveTime[1/*right*/]    = 1600/*ms*/;
+      moveTime[0/*backward*/] = 600/*ms*/;
+      moveTime[1/*right*/]    = 500/*ms*/;
       
       isDone = backAndRight(moveTime/*ms*/);
 
@@ -228,9 +256,9 @@ void carDoesState(int &carState)
       break;
 
     case lineAtFrontSecond: //go back, right and then left
-      moveTime[0/*backward*/] = 600 /*ms*/;
-      moveTime[1/*right*/]    = 1600/*ms*/;
-      moveTime[2/*left*/]     = 1600/*ms*/;
+      moveTime[0/*backward*/] = 600/*ms*/;
+      moveTime[1/*right*/]    = 500/*ms*/;
+      moveTime[2/*left*/]     = 500/*ms*/;
 
       carState = lineAtFrontFirst; 
       break;
@@ -240,7 +268,7 @@ void carDoesState(int &carState)
       break;
 
     case lineAtBothSides:    
-      isDone = moveAndWait_ms(BACKWARD, 800/*ms*/);
+      isDone = moveAndWait_ms(BACKWARD, 500/*ms*/);
 
       if(isDoneSecond)
       {
@@ -250,16 +278,16 @@ void carDoesState(int &carState)
       
       if(isDone)
       {  
-        isDoneSecond = moveAndWait_ms(LEFT, 800/*ms*/);
+        isDoneSecond = moveAndWait_ms(LEFT, 500/*ms*/);
         isDone = false;
       }
       break;
 
-    case detectedObstacle: //avoid obstikal
-      moveTime[0/*backward*/] = 600 /*ms*/;
-      moveTime[1/*right*/]    = 1600/*ms*/;
+    case detectedObstacle: //avoid obstikal(back and then right)
+      moveTime[0/*backward*/] = 600/*ms*/;
+      moveTime[1/*right*/]    = 800/*ms*/;
 
-      isDone = backAndRight(moveTime/*ms*/);
+      isDone = backAndLeft(moveTime/*ms*/);
 
       if(isDone && !OBSTACLE_IS_SEEN)
         carState = driveForward;
@@ -331,13 +359,13 @@ void getSensorData(CarData* carData)
 void carLogic(CarData* carData, int &carState)
 {
   //default state is driveForward
-
+    
   getSensorData(/*out*/carData);
-
-  checkIR_Sensors(carData->irArray, /*out*/carState);
 
   if(OBSTACLE_IS_SEEN)
     carState = detectedObstacle;
+
+  checkIR_Sensors(carData->irArray, /*out*/carState);
 
   if(carData->REED)
     carState = end;

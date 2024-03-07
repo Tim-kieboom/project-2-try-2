@@ -46,37 +46,39 @@ void sendData(CarData* carData, int carState)
 
 void setup() 
 {
+
   CarData* carData = new CarData();
   int carState = driveForward;
 
   init();
   sendData(carData, carState);
 
-  while(1)
-  {
-    if(carState == end)
-      break;
+  // while(1)
+  // {
+  //   if(carState == end)
+  //     break;
 
-    bool wifiStart = getWifiState(); 
+  //   bool wifiStart = getWifiState(); 
 
-    Serial.println("state: " + String(wifiStart));
+  //   Serial.println("state: " + String(wifiStart));
 
-    if(!wifiStart)
-    {  
-      setSensorData_toEmpty();
-      continue;
-    }
+  //   if(!wifiStart)
+  //   {  
+  //     moveCar(STOP_MOVING);
+  //     setSensorData_toEmpty();
+  //     continue;
+  //   }
 
-    carLogic(/*out*/carData, /*out*/carState);
-    sendData(carData, carState);
+  //   carLogic(/*out*/carData, /*out*/carState);
+  //   sendData(carData, carState);
 
-    Serial.println(carState);
-  }
+  //   Serial.println(carState);
+  // }
 
-  Serial.println("ending program");
+  // Serial.println("ending program");
 
-  delete carData;
+  // delete carData;
 }
 
 
-void loop(){}
+void loop(){moveCar(FORWARD);}

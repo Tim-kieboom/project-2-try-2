@@ -1,8 +1,6 @@
 #include <Arduino.h>
 #include "motor.h"
 
-#define IS_END_OF_ARRAY(array, index) array[index] == -1 /*null-asci-value (end of array also value 0)*/
-
 static const int frequency = 500;
 static const int resolution = 8;
 static const uint8_t channel_A = 0;
@@ -57,16 +55,20 @@ void moveMotor(bool motor, uint8_t mode)
 void motorPWM(int cyle_us)
 {
     static Timer* timer = new Timer(SET_TIMER_IN_US);
+    static bool isLow = false;
 
     if(timer->waitTime(cyle_us))
-    {
-        digitalWrite(ENA, HIGH);
-        digitalWrite(ENB, HIGH);
-    }
-    else
+        isLow = !isLow;
+
+    if(isLow)
     {
         digitalWrite(ENA, LOW);
         digitalWrite(ENB, LOW);
+    }
+    else
+    {
+        digitalWrite(ENA, HIGH);
+        digitalWrite(ENB, HIGH);
     }
 }
 
